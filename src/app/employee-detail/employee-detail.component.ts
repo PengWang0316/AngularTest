@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from '../employee.service';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 
 // import IEmployee from '../IEmployee';
 
@@ -11,6 +12,7 @@ import { EmployeeService } from '../employee.service';
             <div *ngFor="let employee of employees">
               <ul><li>{{employee.id}}  {{employee.name}}  {{employee.age}}</li></ul>
             </div>
+            <h3>The param id is: {{id}}</h3>
   `,
   styles: [`
            .red{
@@ -22,11 +24,15 @@ export class EmployeeDetailComponent implements OnInit {
 
   public employees = [];
   public errorMsg: string;
+  public id: number;
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private employeeService: EmployeeService, private route: ActivatedRoute, private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit() {console.log(this.route);
     this.employeeService.getEmployees().subscribe(data => this.employees = data, error => this.errorMsg = error);
+    // let id = parseInt(this.route.snapshot.paramMap.get('id'));
+    // this.id = id;
+    this.route.paramMap.subscribe((params: ParamMap) => this.id = parseInt(params.get('id')));
   }
 
 }
